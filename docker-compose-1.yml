@@ -26,6 +26,10 @@ services:
       - "3000:3000"
 
     environment:
+      WAHA_HTTPS_ENABLED: "true"
+      WAHA_HTTPS_CERT_PATH: "/certs/cert.pem"
+      WAHA_HTTPS_KEY_PATH: "/certs/key.pem"
+    
       WAHA_API_KEY_HASH: "f7eadecc75a06a7456be3707e2c5f83ea12ac1c51b41132c0c1a55bbb0136cba"
       WAHA_API_KEY_HASH_TYPE: "sha256"
 
@@ -49,6 +53,7 @@ services:
       WAHA_REDIS_PASSWORD: "default"
 
     volumes:
+      - /opt/waha/certs:/certs:ro
       - waha_sessions:/app/.sessions
       - waha_media:/app/.media
 
