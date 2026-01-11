@@ -1,0 +1,104 @@
+version: "3.9"
+
+networks:
+  automations:
+    driver: bridge
+
+services:
+
+  # =========================
+  # Redis
+  # =========================
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: always
+    command: redis-server --appendonly yes
+    volumes:
+      - ./redis:/data
+    networks:
+      - automations
+
+  # =========================
+  # WAHA - WhatsApp API
+  # =========================
+  waha:
+    image: devlikeapro/waha:latest
+    container_name: waha
+    restart: always
+
+    depends_on:
+      - redis
+
+    ports:
+      - "3000:3000"
+
+    environment:
+      # 🔐 Segurança
+      WAHA_API_KEY_HASH: "f7eadecc75a06a7456be3707e2c5f83ea12ac1c51b41132c0c1a55bbb0136cba"
+      WAHA_API_KEY_HASH_TYPE: "sha256"
+
+      # ⚙️ Configurações
+      WAHA_LOG_LEVEL: "info"
+      WAHA_TIMEZONE: "America/Sao_Paulo"
+
+      # 📦 Sessões WhatsApp
+      WAHA_SESSIONS_PATH: "/app/sessions"
+
+      # 📊 Extras
+      WAHA_ENABLE_SWAGGER: "true"
+      WAHA_ENABLE_METRICS: "true"
+
+      # 🚀 Redis
+      WAHA_REDIS_ENABLED: "true"
+      WAHA_REDIS_HOST: "redis"
+      WAHA_REDIS_PORT: "6379"
+
+    volumes:
+      - ./waha/sessions:/app/sessions
+      - ./waha/logs:/app/logs
+
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+    networks:
+      - automations
+
+  # =========================
+  # n8n - Automação
+  # =========================
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: always
+
+    depends_on:
+      - redis
+
+    ports:
+      - "3001:5678"
+
+    environment:
+      # 🔐 Segurança n8n
+      N8N_BASIC_AUTH_ACTIVE: "true"
+      N8N_BASIC_AUTH_USER: "admin"
+      N8N_BASIC_AUTH_PASSWORD: "Idg45uj5tr50mn25#)"
+
+      # 🌍 Timezone
+      TZ: "America/Sao_Paulo"
+
+      # 🚀 Redis (fila / execuções)
+      QUEUE_BULL_REDIS_HOST: "redis"
+      QUEUE_BULL_REDIS_PORT: "6379"
+
+      # ⚙️ Performance
+      EXECUTIONS_MODE: "queue"
+
+    volumes:
+      - ./n8n:/home/node/.n8n
+
+    networks:
+      - automations
