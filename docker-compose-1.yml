@@ -7,7 +7,7 @@ networks:
     driver: bridge
 
 services:
-redis:
+  redis:
     image: redis:7-alpine
     container_name: waha-redis
     restart: always
@@ -16,7 +16,6 @@ redis:
       - redis_data:/data
     networks:
       - waha_net
-
 
   waha:
     image: devlikeapro/waha:latest
@@ -30,29 +29,23 @@ redis:
       - "3000:3000"
 
     environment:
-      # 🔐 HTTPS (OBRIGATÓRIO)
       WAHA_HTTPS_ENABLED: "true"
 
-      # 🔐 API Key (HASH)
       WAHA_API_KEY_HASH: "f7eadecc75a06a7456be3707e2c5f83ea12ac1c51b41132c0c1a55bbb0136cba"
       WAHA_API_KEY_HASH_TYPE: "sha256"
       WAHA_NO_API_KEY: "false"
 
-      # 🔐 Dashboard / Swagger
       WAHA_DASHBOARD_USERNAME: "sjheming"
       WAHA_DASHBOARD_PASSWORD: "Idg45uj5tr50mn25#)"
 
       WHATSAPP_SWAGGER_USERNAME: "sjheming"
       WHATSAPP_SWAGGER_PASSWORD: "Idg45uj5tr50mn25#)"
 
-      # ⚙️ WhatsApp
       WHATSAPP_DEFAULT_ENGINE: "GOWS"
       WHATSAPP_HOOK_EVENTS: "message"
 
-      # 🌍 Timezone
       WAHA_TIMEZONE: "America/Sao_Paulo"
 
-      # 🚀 Redis
       WAHA_REDIS_ENABLED: "true"
       WAHA_REDIS_HOST: "redis"
       WAHA_REDIS_PORT: "6379"
@@ -96,3 +89,4 @@ volumes:
   waha_sessions:
   waha_media:
   n8n_data:
+
