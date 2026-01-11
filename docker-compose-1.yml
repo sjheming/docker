@@ -13,14 +13,16 @@ services:
     image: redis:7-alpine
     container_name: redis
     restart: always
-    command: redis-server --appendonly yes
+    command: redis-server --requirepass default
+    ports:
+      - "6379:6379"
     volumes:
-      - ./redis:/data
+      - redis_data:/data
     networks:
       - automations
 
   # =========================
-  # WAHA - WhatsApp API
+  # WAHA
   # =========================
   waha:
     image: devlikeapro/waha:latest
@@ -34,41 +36,40 @@ services:
       - "3000:3000"
 
     environment:
-      # 🔐 Segurança
+      # 🔐 API Key (HASH)
       WAHA_API_KEY_HASH: "f7eadecc75a06a7456be3707e2c5f83ea12ac1c51b41132c0c1a55bbb0136cba"
       WAHA_API_KEY_HASH_TYPE: "sha256"
 
-      # ⚙️ Configurações
-      WAHA_LOG_LEVEL: "info"
+      # ❌ DESATIVAR flags inseguras
+      WAHA_NO_API_KEY: "false"
+      WAHA_DASHBOARD_NO_PASSWORD: "false"
+      WHATSAPP_SWAGGER_NO_PASSWORD: "false"
+
+      # ⚙️ Configurações WhatsApp
+      WHATSAPP_DEFAULT_ENGINE: "GOWS"
+      WHATSAPP_HOOK_EVENTS: "message"
+
+      # 🌍 Timezone
       WAHA_TIMEZONE: "America/Sao_Paulo"
 
-      # 📦 Sessões WhatsApp
-      WAHA_SESSIONS_PATH: "/app/sessions"
-
-      # 📊 Extras
-      WAHA_ENABLE_SWAGGER: "true"
-      WAHA_ENABLE_METRICS: "true"
+      # 🔗 Webhook n8n (rede interna)
+      WHATSAPP_HOOK_URL: "http://n8n:5678/webhook/webhook"
 
       # 🚀 Redis
       WAHA_REDIS_ENABLED: "true"
       WAHA_REDIS_HOST: "redis"
       WAHA_REDIS_PORT: "6379"
+      WAHA_REDIS_PASSWORD: "default"
 
     volumes:
-      - ./waha/sessions:/app/sessions
-      - ./waha/logs:/app/logs
-
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      - waha_sessions:/app/.sessions
+      - waha_media:/app/.media
 
     networks:
       - automations
 
   # =========================
-  # n8n - Automação
+  # n8n
   # =========================
   n8n:
     image: n8nio/n8n:latest
@@ -79,26 +80,39 @@ services:
       - redis
 
     ports:
-      - "3001:5678"
+      - "5678:5678"
 
     environment:
+      # 🌍 Host correto para VPS
+      WEBHOOK_URL: "http://shoprime.com.br:5678"
+      N8N_HOST: "shoprime.com.br"
+      N8N_PORT: "5678"
+      N8N_PROTOCOL: "http"
+
       # 🔐 Segurança n8n
       N8N_BASIC_AUTH_ACTIVE: "true"
       N8N_BASIC_AUTH_USER: "admin"
       N8N_BASIC_AUTH_PASSWORD: "Idg45uj5tr50mn25#)"
 
-      # 🌍 Timezone
-      TZ: "America/Sao_Paulo"
+      # 🌎 Timezone
+      GENERIC_TIMEZONE: "America/Sao_Paulo"
 
-      # 🚀 Redis (fila / execuções)
+      # 🚀 Redis
       QUEUE_BULL_REDIS_HOST: "redis"
       QUEUE_BULL_REDIS_PORT: "6379"
-
-      # ⚙️ Performance
+      QUEUE_BULL_REDIS_PASSWORD: "default"
       EXECUTIONS_MODE: "queue"
 
+      N8N_LOG_LEVEL: "info"
+
     volumes:
-      - ./n8n:/home/node/.n8n
+      - n8n_data:/home/node/.n8n
 
     networks:
       - automations
+
+volumes:
+  redis_data:
+  waha_sessions:
+  waha_media:
+  n8n_data:
