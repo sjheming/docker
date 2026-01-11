@@ -25,48 +25,54 @@ services:
   # WAHA
   # =========================
   waha:
-    image: devlikeapro/waha:latest
-    container_name: waha
-    restart: always
+  image: devlikeapro/waha:latest
+  container_name: waha
+  restart: always
 
-    depends_on:
-      - redis
+  depends_on:
+    - redis
 
-    ports:
-      - "3000:3000"
+  ports:
+    - "3000:3000"
 
-    environment:
-      # 🔐 API Key (HASH)
-      WAHA_API_KEY_HASH: "f7eadecc75a06a7456be3707e2c5f83ea12ac1c51b41132c0c1a55bbb0136cba"
-      WAHA_API_KEY_HASH_TYPE: "sha256"
+  environment:
+    # 🔐 API Key (HASH)
+    WAHA_API_KEY_HASH: "f7eadecc75a06a7456be3707e2c5f83ea12ac1c51b41132c0c1a55bbb0136cba"
+    WAHA_API_KEY_HASH_TYPE: "sha256"
 
-      # ❌ DESATIVAR flags inseguras
-      WAHA_NO_API_KEY: "false"
-      WAHA_DASHBOARD_NO_PASSWORD: "false"
-      WHATSAPP_SWAGGER_NO_PASSWORD: "false"
+    # 🔐 Dashboard / Swagger
+    WAHA_DASHBOARD_USERNAME: "admin"
+    WAHA_DASHBOARD_PASSWORD: "Idg45uj5tr50mn25#)"
 
-      # ⚙️ Configurações WhatsApp
-      WHATSAPP_DEFAULT_ENGINE: "GOWS"
-      WHATSAPP_HOOK_EVENTS: "message"
+    WHATSAPP_SWAGGER_USERNAME: "admin"
+    WHATSAPP_SWAGGER_PASSWORD: "Idg45uj5tr50mn25#)"
 
-      # 🌍 Timezone
-      WAHA_TIMEZONE: "America/Sao_Paulo"
+    # ⚙️ Segurança
+    WAHA_NO_API_KEY: "false"
 
-      # 🔗 Webhook n8n (rede interna)
-      WHATSAPP_HOOK_URL: "http://n8n:5678/webhook/webhook"
+    # ⚙️ WhatsApp
+    WHATSAPP_DEFAULT_ENGINE: "GOWS"
+    WHATSAPP_HOOK_EVENTS: "message"
 
-      # 🚀 Redis
-      WAHA_REDIS_ENABLED: "true"
-      WAHA_REDIS_HOST: "redis"
-      WAHA_REDIS_PORT: "6379"
-      WAHA_REDIS_PASSWORD: "default"
+    # 🌍 Timezone
+    WAHA_TIMEZONE: "America/Sao_Paulo"
 
-    volumes:
-      - waha_sessions:/app/.sessions
-      - waha_media:/app/.media
+    # 🔗 Webhook n8n
+    WHATSAPP_HOOK_URL: "http://n8n:5678/webhook/webhook"
 
-    networks:
-      - automations
+    # 🚀 Redis
+    WAHA_REDIS_ENABLED: "true"
+    WAHA_REDIS_HOST: "redis"
+    WAHA_REDIS_PORT: "6379"
+    WAHA_REDIS_PASSWORD: "default"
+
+  volumes:
+    - waha_sessions:/app/.sessions
+    - waha_media:/app/.media
+
+  networks:
+    - automations
+
 
   # =========================
   # n8n
