@@ -36,7 +36,7 @@ services:
       WHATSAPP_HOOK_URL: http://n8n:5678/webhook/waha
 
       # API KEY (texto puro)
-      WAHA_API_KEY_PLAIN: "e99955ecde0ac11ed6bc9163afafdd84a9989e87eeeba231870e22921bac3cda"
+      WAHA_API_KEY: "e99955ecde0ac11ed6bc9163afafdd84a9989e87eeeba231870e22921bac3cda"
 
       # 🔑 Apps habilitados (apenas UMA vez)
       WAHA_APPS_ENABLED: "true"
