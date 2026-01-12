@@ -38,9 +38,6 @@ services:
       # API KEY (texto puro)
       WAHA_API_KEY: "e99955ecde0ac11ed6bc9163afafdd84a9989e87eeeba231870e22921bac3cda"
 
-      # 🔑 Apps habilitados (apenas UMA vez)
-      WAHA_APPS_ENABLED: "true"
-
       # Dashboard
       WAHA_DASHBOARD_USERNAME: "sjheming"
       WAHA_DASHBOARD_PASSWORD: "Idg45uj5tr50mn25#)"
