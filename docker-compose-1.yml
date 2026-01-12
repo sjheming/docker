@@ -21,31 +21,34 @@ services:
     image: devlikeapro/waha:latest
     container_name: waha
     restart: always
-
     depends_on:
       - redis
-
     ports:
       - "3000:3000"
 
     environment:
+      # HTTPS
       WAHA_HTTPS_ENABLED: "true"
 
-      WAHA_API_KEY_HASH: "f7eadecc75a06a7456be3707e2c5f83ea12ac1c51b41132c0c1a55bbb0136cba"
-      WAHA_API_KEY_HASH_TYPE: "sha256"
-      WAHA_NO_API_KEY: "false"
+      # API KEY (texto puro)
+      WAHA_API_KEY: "e99955ecde0ac11ed6bc9163afafdd84a9989e87eeeba231870e22921bac3cda"
 
+      # Dashboard
       WAHA_DASHBOARD_USERNAME: "sjheming"
       WAHA_DASHBOARD_PASSWORD: "Idg45uj5tr50mn25#)"
 
+      # Swagger
       WHATSAPP_SWAGGER_USERNAME: "sjheming"
       WHATSAPP_SWAGGER_PASSWORD: "Idg45uj5tr50mn25#)"
 
+      # WhatsApp Engine
       WHATSAPP_DEFAULT_ENGINE: "GOWS"
       WHATSAPP_HOOK_EVENTS: "message"
 
+      # Timezone
       WAHA_TIMEZONE: "America/Sao_Paulo"
 
+      # Redis
       WAHA_REDIS_ENABLED: "true"
       WAHA_REDIS_HOST: "redis"
       WAHA_REDIS_PORT: "6379"
@@ -63,7 +66,6 @@ services:
     image: n8nio/n8n:latest
     container_name: n8n
     restart: always
-
     ports:
       - "5678:5678"
 
@@ -89,4 +91,3 @@ volumes:
   waha_sessions:
   waha_media:
   n8n_data:
-
