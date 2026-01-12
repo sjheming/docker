@@ -75,6 +75,9 @@ services:
       - "5678:5678"
 
     environment:
+      # 🔥 ESSENCIAL: permite HTTPS self-signed (WAHA)
+      NODE_TLS_REJECT_UNAUTHORIZED: "0"
+      
       N8N_HOST: "62.72.63.172"
       WEBHOOK_URL: "http://62.72.63.172:5678"
       GENERIC_TIMEZONE: "America/Sao_Paulo"
