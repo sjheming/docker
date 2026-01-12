@@ -1,0 +1,103 @@
+version: "3.9"
+
+networks:
+  automations:
+    driver: bridge
+  waha_net:
+    driver: bridge
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: waha-redis
+    restart: always
+    command: redis-server --requirepass default
+    environment:
+      REDIS_USER: default
+      REDIS_PASSWORD: default
+    volumes:
+      - redis_data:/data
+    networks:
+      - waha_net
+
+  waha:
+    image: devlikeapro/waha:latest
+    container_name: waha
+    platform: linux/amd64
+    restart: always
+    depends_on:
+      - redis
+    ports:
+      - "3000:3000"
+
+    environment:
+      # HTTPS
+      WAHA_HTTPS_ENABLED: "true"
+
+      WHATSAPP_HOOK_URL: http://n8n:5678/webhook/waha
+
+      # API KEY (texto puro)
+      WAHA_API_KEY: "e99955ecde0ac11ed6bc9163afafdd84a9989e87eeeba231870e22921bac3cda"
+
+      # Dashboard
+      WAHA_DASHBOARD_USERNAME: "sjheming"
+      WAHA_DASHBOARD_PASSWORD: "Idg45uj5tr50mn25#)"
+
+      # Swagger
+      WHATSAPP_SWAGGER_USERNAME: "sjheming"
+      WHATSAPP_SWAGGER_PASSWORD: "Idg45uj5tr50mn25#)"
+
+      # WhatsApp Engine
+      WHATSAPP_DEFAULT_ENGINE: "GOWS"
+      WHATSAPP_HOOK_EVENTS: "message"
+
+      # Timezone
+      WAHA_TIMEZONE: "America/Sao_Paulo"
+
+      # Redis
+      WAHA_REDIS_ENABLED: "true"
+      WAHA_REDIS_HOST: "redis"
+      WAHA_REDIS_PORT: "6379"
+      WAHA_REDIS_PASSWORD: "default"
+
+    volumes:
+      - /opt/waha/secrets:/app/.secrets:ro
+      - waha_sessions:/app/.sessions
+      - waha_media:/app/.media
+
+    networks:
+      - waha_net
+
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: always
+    ports:
+      - "5678:5678"
+
+    environment:
+      # 🔥 ESSENCIAL: permite HTTPS self-signed (WAHA)
+      NODE_TLS_REJECT_UNAUTHORIZED: "0"
+      
+      N8N_HOST: "62.72.63.172"
+      WEBHOOK_URL: "http://62.72.63.172:5678"
+      GENERIC_TIMEZONE: "America/Sao_Paulo"
+
+      N8N_SECURE_COOKIE: "false"
+
+      N8N_BASIC_AUTH_ACTIVE: "true"
+      N8N_BASIC_AUTH_USER: "sjheming"
+      N8N_BASIC_AUTH_PASSWORD: "Idg45uj5tr50mn25#)"
+
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+    networks:
+      - automations
+      - waha_net
+
+volumes:
+  redis_data:
+  waha_sessions:
+  waha_media:
+  n8n_data:
