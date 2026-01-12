@@ -33,6 +33,8 @@ services:
       # HTTPS
       WAHA_HTTPS_ENABLED: "true"
 
+      WHATSAPP_HOOK_URL: http://n8n:5678/webhook/waha
+
       # API KEY (texto puro)
       WAHA_API_KEY: "e99955ecde0ac11ed6bc9163afafdd84a9989e87eeeba231870e22921bac3cda"
 
@@ -56,6 +58,8 @@ services:
       WAHA_REDIS_HOST: "redis"
       WAHA_REDIS_PORT: "6379"
       WAHA_REDIS_PASSWORD: "default"
+      
+      WAHA_APPS_ENABLED: "true"
 
     volumes:
       - /opt/waha/secrets:/app/.secrets:ro
