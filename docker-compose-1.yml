@@ -12,6 +12,9 @@ services:
     container_name: waha-redis
     restart: always
     command: redis-server --requirepass default
+    environment:
+      REDIS_USER: default
+      REDIS_PASSWORD: default
     volumes:
       - redis_data:/data
     networks:
