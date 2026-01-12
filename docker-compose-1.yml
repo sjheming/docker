@@ -37,6 +37,8 @@ services:
 
       # API KEY (texto puro)
       WAHA_API_KEY_PLAIN: "e99955ecde0ac11ed6bc9163afafdd84a9989e87eeeba231870e22921bac3cda"
+
+      # 🔑 Apps habilitados (apenas UMA vez)
       WAHA_APPS_ENABLED: "true"
 
       # Dashboard
@@ -59,8 +61,6 @@ services:
       WAHA_REDIS_HOST: "redis"
       WAHA_REDIS_PORT: "6379"
       WAHA_REDIS_PASSWORD: "default"
-      
-      WAHA_APPS_ENABLED: "true"
 
     volumes:
       - /opt/waha/secrets:/app/.secrets:ro
