@@ -88,6 +88,7 @@ services:
 
     networks:
       - automations
+      - waha_net
 
 volumes:
   redis_data:
