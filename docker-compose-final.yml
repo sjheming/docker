@@ -78,8 +78,10 @@ services:
       # 🔥 ESSENCIAL: permite HTTPS self-signed (WAHA)
       NODE_TLS_REJECT_UNAUTHORIZED: "0"
       
-      N8N_HOST: "62.72.63.172"
-      WEBHOOK_URL: "http://62.72.63.172:5678"
+      N8N_HOST: "n8n.shoprime.com.br"
+      N8N_PORT=5678
+      N8N_PROTOCOL=https
+      WEBHOOK_URL: "https://n8n.shoprime.com.br"
       GENERIC_TIMEZONE: "America/Sao_Paulo"
 
       N8N_SECURE_COOKIE: "false"
