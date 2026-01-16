@@ -36,9 +36,9 @@ services:
       WHATSAPP_HOOK_MEDIA: "true"
       WHATSAPP_HOOK_MEDIA_BASE64: "true"
 
-      WAHA_BASE_URL: "http://waha:3000"
+      WAHA_BASE_URL: "https://waha:3000"
       
-      WHATSAPP_HOOK_URL: "http://n8n:5678/webhook/waha"
+      WHATSAPP_HOOK_URL: "https://n8n:5678/webhook/waha"
 
       # API KEY (texto puro)
       WAHA_API_KEY: "e99955ecde0ac11ed6bc9163afafdd84a9989e87eeeba231870e22921bac3cda"
