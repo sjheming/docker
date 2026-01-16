@@ -31,7 +31,7 @@ services:
 
     environment:
       # HTTPS
-      WAHA_HTTPS_ENABLED: "false"
+      WAHA_HTTPS_ENABLED: "true"
 
       WHATSAPP_HOOK_MEDIA: "true"
       WHATSAPP_HOOK_MEDIA_BASE64: "true"
