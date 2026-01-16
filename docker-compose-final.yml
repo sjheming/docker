@@ -31,7 +31,10 @@ services:
 
     environment:
       # HTTPS
-      WAHA_HTTPS_ENABLED: "true"
+      WAHA_HTTPS_ENABLED: "false"
+
+      WHATSAPP_HOOK_MEDIA: "true"
+      WHATSAPP_HOOK_MEDIA_BASE64: "true"
 
       WAHA_BASE_URL: "http://waha:3000"
       
